@@ -1,25 +1,24 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Hello World!</title>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>, Chromium
-    <span id="chrome-version"></span>, and Electron
-    <span id="electron-version"></span>.
-
-    <!-- You can also require other files to run in this process -->
-    <script src="./dist/renderer.js"></script>
-  </body>
-</html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'">
+  <title>Wolf Winder</title>
+  <link rel="stylesheet" href="ui.css">
+</head>
+<body>
+<header><div><p class="eyebrow">FILAMENT WINDING / PROJECT EDITOR</p><h1>Wolf Winder<span>01</span></h1></div>
+<nav aria-label="Project"><button id="new">New project</button><button id="open">Open .wind</button><button id="save">Save project</button></nav></header>
+<main>
+<div class="editor">
+<section><h2><span>01</span> Mandrel &amp; tow</h2><p class="hint">Cylindrical mandrels · dimensions in millimeters</p><div id="geometry" class="fields"></div></section>
+<section><h2><span>02</span> Feed &amp; coordinate offsets</h2><div id="machine" class="fields"></div><p class="hint">Offsets translate absolute output coordinates, including G92 resets. They do not home the machine or calibrate steps per unit. Feed is Marlin coordinate units/min; rotary axes use degrees.</p></section>
+<section><div class="section-heading"><h2><span>03</span> Layer sequence</h2><button id="add">+ Add layer</button></div><div id="layers"></div></section>
+</div>
+<aside>
+<section class="output"><p class="eyebrow">TOOLPATH OUTPUT</p><h2>Review &amp; export</h2><p class="hint">Generate a G-code preview from the current values, then export it for your controller.</p><div class="actions"><button id="generate" class="primary">Generate preview</button><button id="export">Export G-code</button></div><p id="status" role="status" aria-live="polite">Loading project…</p><label for="preview">G-code preview <span id="count"></span></label><textarea id="preview" readonly spellcheck="false" placeholder="Your generated commands will appear here."></textarea><p class="hint">Planning and file export only. Machine streaming remains available through the existing CLI. Verify machine setup, coordinate origin, and travel before running exported code.</p></section>
+</aside>
+</main>
+<script src="./dist/renderer.js"></script>
+</body></html>

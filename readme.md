@@ -1,3 +1,92 @@
+# Wolf Winder
+
+A simple desktop editor for cylindrical filament-winding projects, based on
+[jcricha007/basilisk](https://github.com/jcricha007/basilisk) and Andrew Reilley's
+[Cyclone](https://github.com/reilleya/cyclone). Edit parameters in the app, save a
+`.wind` project, and generate/export G-code without using CLI planning commands.
+
+## Download and launch
+
+Install Node.js 22 LTS and Git first. On macOS Terminal or Windows PowerShell:
+
+```sh
+git clone https://github.com/jcricha007/Wolf-Winder.git
+cd Wolf-Winder
+npm ci
+npm start
+```
+
+`npm start` builds the TypeScript source and opens the Electron editor. The initial
+installation needs network access and inherits the upstream native `canvas` and
+`serialport` dependencies. If installation fails, keep the error output for
+troubleshooting. This release uses the inherited Electron 17 runtime; no packaged
+installer is provided yet.
+
+## Use the editor
+
+1. Enter mandrel diameter, winding length, and tow width in millimeters.
+2. Set feed rate and optional X/Y/Z coordinate offsets.
+3. Add, remove, or reorder helical, hoop, and rotation/skip layers.
+4. Select **Generate preview**. Resolve any validation errors shown beside the output.
+5. Select **Save project** to keep editable settings, or **Export G-code** to save the full toolpath.
+
+**Open .wind** accepts original Basilisk/Cyclone JSON projects. Missing offsets
+become zero. Unsaved edits trigger a prompt before opening another project,
+starting a new one, or closing the window. Editing a value clears the previous
+preview. The preview displays at most 2,000 lines; export regenerates the complete
+toolpath from the current fields.
+
+### Units and offsets
+
+| Field | Meaning |
+| --- | --- |
+| X offset | Carriage coordinate translation, mm |
+| Y offset | Mandrel coordinate translation, degrees |
+| Z offset | Delivery-head coordinate translation, degrees |
+| Feed rate | Marlin coordinate units/min; includes rotary degrees as coordinate units |
+| Helical angle | Angle from the mandrel axis, degrees, as used by the planner's tangent calculation |
+| Lead-in | Carriage distance while the head rotates into position, mm |
+| Lead-out | Mandrel rotation while the head returns toward level, degrees |
+
+Offsets are added to absolute movement coordinates **and G92 coordinate resets**,
+including layer transitions. They are not homing commands, step calibration, or
+physical travel limits. For example, X = 20 shifts the wound interval from
+`0 … windLength` to `20 … (20 + windLength)`. Export explicitly selects G21/G90
+and sets the feed before the first positioning move. Existing CLI planning is
+unchanged and does **not** apply the UI's optional offsets; use UI export for
+projects with offsets.
+
+### Current scope
+
+- Cylindrical mandrels only; no dome, friction, or boss-turnaround modeling.
+- Tow thickness is stored for project compatibility but is unused by the inherited planner.
+- Skip index is fixed at 1 because the inherited planner ignores that field.
+  Imported non-1 values produce an explicit error instead of being silently ignored.
+- Pattern number must divide the calculated circuit count; 1 always divides it.
+- Terminal hoop layers must be last. Lead-in cannot exceed wind length;
+  lead-out cannot exceed lock rotation.
+- UI validation caps projects at 100 layers and 200,000 estimated commands to
+  bound planning work. These are software resource limits, not machine ratings.
+- The UI generates files; serial streaming remains in the existing CLI. Confirm
+  machine origin, axis calibration, travel, and generated moves before machine use.
+  Planner mathematics and hardware operation have not been newly validated by this UI release.
+
+## Development checks
+
+```sh
+npm test
+npm run lint
+```
+
+See [CHANGELOG.md](CHANGELOG.md) for this release's changes. The original project
+notes and attribution are retained below. Upstream metadata declares MIT while
+its README says GPL v3; this change preserves that existing discrepancy rather
+than assigning a new license.
+
+---
+
+## Original Cyclone documentation
+
 Cyclone
 ==========
 

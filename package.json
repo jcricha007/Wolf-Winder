@@ -1,18 +1,19 @@
 {
-  "name": "cyclone",
-  "version": "0.0.0",
-  "description": "Control software for Marlin-driven filament winders",
+  "name": "wolf-winder",
+  "version": "0.1.0",
+  "description": "Desktop project editor and toolpath generator for cylindrical filament winding",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "lint": "eslint -c .eslintrc --ext .ts ./src",
     "start": "npm run build && electron ./dist/main.js",
-    "cli": "npm run build && node ./dist/cli-entry.js"
+    "cli": "npm run build && node ./dist/cli-entry.js",
+    "test": "npm run build && node --test tests/*.test.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reilleya/cyclone.git"
+    "url": "git+https://github.com/jcricha007/Wolf-Winder.git"
   },
   "keywords": [
     "cnc",
@@ -22,9 +23,9 @@
   "author": "Andrew Reilley",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/reilleya/cyclone/issues"
+    "url": "https://github.com/jcricha007/Wolf-Winder/issues"
   },
-  "homepage": "https://github.com/reilleya/cyclone#readme",
+  "homepage": "https://github.com/jcricha007/Wolf-Winder#readme",
   "dependencies": {
     "@types/canvasjs": "^1.9.7",
     "canvas": "^3.2.0",
